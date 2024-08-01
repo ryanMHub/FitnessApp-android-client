@@ -11,9 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,10 +36,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ryanmhub.fitnessapp.android_client.R
-import com.ryanmhub.fitnessapp.android_client.ui.theme.GrayColor
-import com.ryanmhub.fitnessapp.android_client.ui.theme.Primary
-import com.ryanmhub.fitnessapp.android_client.ui.theme.Secondary
-import com.ryanmhub.fitnessapp.android_client.ui.theme.TextColor
+import com.ryanmhub.fitnessapp.android_client.ui.theme.*
 
 @Composable
 fun NormalTextComponent(value: String){
@@ -91,10 +86,7 @@ fun HeaderTextComponent(value: String){
 
 //Todo: I'm not sure if .color() is the right approach here. Border color is not changing
 @Composable
-fun StandTextField(labelValue : String, painter: Painter){
-    val textValue = remember {
-        mutableStateOf("")
-    }
+fun StandTextField(labelValue : String, painter: Painter, onTextChanged: (String) -> Unit, textValue : String){
 
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth().clip(componentShapes.small),
@@ -106,9 +98,9 @@ fun StandTextField(labelValue : String, painter: Painter){
             cursorColor = Primary
         ),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-        value = textValue.value,
+        value = textValue,
         onValueChange = {
-            textValue.value = it
+            onTextChanged(it)
         },
         leadingIcon = {
             Icon(painter = painter, contentDescription = "") //Get custom drawable.xml for icons
@@ -120,11 +112,8 @@ fun StandTextField(labelValue : String, painter: Painter){
 
 //Todo: I'm not sure if .color() is the right approach here. Border color is not changing
 @Composable
-fun PasswordTextField(labelValue : String, painter: Painter){
+fun PasswordTextField(labelValue : String, painter: Painter, onTextChanged : (String) -> Unit, textValue : String){
     val localFocusManager = LocalFocusManager.current
-    val password = remember {
-        mutableStateOf("")
-    }
 
     val passwordVisible = remember {
         mutableStateOf(false)
@@ -145,9 +134,9 @@ fun PasswordTextField(labelValue : String, painter: Painter){
             localFocusManager.clearFocus()
         }),
         maxLines = 1,
-        value = password.value,
+        value = textValue,
         onValueChange = {
-            password.value = it
+            onTextChanged(it)
         },
         leadingIcon = {
             Icon(painter = painter, contentDescription = "") //Get custom drawable.xml for icons
@@ -260,8 +249,8 @@ fun ClickableTextComponentEnding(initialText : String, ending : String, onTextSe
 }
 
 @Composable
-fun ButtonComponent(value : String){
-    Button(onClick = {/*Todo*/},
+fun ButtonComponent(value : String, onButtonClicked: () -> Unit){
+    Button(onClick = onButtonClicked,
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(48.dp),
@@ -304,5 +293,28 @@ fun DividerTextComponent(){
             .weight(1f),
             color = GrayColor,
             thickness = 1.dp)
+    }
+}
+
+
+@Composable
+fun PopUpComponent(title : String = "Default", message : String? = "Default", showAlert : MutableState<Boolean>){
+    if(showAlert.value) {
+        AlertDialog(onDismissRequest = { showAlert.value = false },
+            title = { Text(text = title) },
+            text = {
+                if (message != null) {
+                    Text(text = message)
+                }
+            },
+            confirmButton = {
+                Button(onClick = { showAlert.value = false }) {
+                    Text(
+                        text = stringResource(R.string.ok),
+                        color = WhiteColor
+                    )
+                }
+            }
+        )
     }
 }

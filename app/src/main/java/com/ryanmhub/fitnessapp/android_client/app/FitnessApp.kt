@@ -7,6 +7,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ryanmhub.fitnessapp.android_client.features.login.ui.LoginView
 import com.ryanmhub.fitnessapp.android_client.features.register.ui.RegisterView
 
@@ -18,7 +19,7 @@ fun FitnessApp() {
         Crossfade(targetState = NavRouter.currScreen, label = ""){ currScreen ->
             when(currScreen.value) {
                 is Screen.RegisterView -> {
-                    RegisterView()
+                    RegisterView(viewModel = viewModel())
                 }
                 is Screen.TermsAndConditions -> {
                     TermsAndConditions()

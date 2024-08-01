@@ -1,42 +1,83 @@
 package com.ryanmhub.fitnessapp.android_client.features.register.ui
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ryanmhub.fitnessapp.android_client.R
 import com.ryanmhub.fitnessapp.android_client.app.NavRouter
 import com.ryanmhub.fitnessapp.android_client.app.Screen
 import com.ryanmhub.fitnessapp.android_client.common.components.*
+import com.ryanmhub.fitnessapp.android_client.common.state.BaseAPIState
+import com.ryanmhub.fitnessapp.android_client.features.register.di.RegisterViewModel
 
 @Composable
-fun RegisterView(){
+fun RegisterView(viewModel: RegisterViewModel){
+    //connect to state machine in viewModel
+    val registrationState by viewModel.registrationState //Todo: Should this be remember by
+
+    val (firstName, setFname) = remember {mutableStateOf("Ryan")}
+    val (lastName, setLname) = remember {mutableStateOf("Moskovciak")}
+    val (email, setEmail) = remember {mutableStateOf("rmoskovciak@gmail.com")}
+    val (username, setUsername) = remember {mutableStateOf("rmosk")}
+    val (password, setPassword) = remember {mutableStateOf("123abc")}
+
+    when(registrationState){
+        is BaseAPIState.Loading -> {
+            CircularProgressIndicator()
+        }
+        is BaseAPIState.Success -> {
+            val data = (registrationState as BaseAPIState.Success).data
+            val showDialog = remember { mutableStateOf(true)}
+            PopUpComponent(stringResource(R.string.success), data?.message, showDialog)
+            Log.d("RegisterView","${data?.success}" + "  " + "${data?.message}")
+        }
+        //Todo: Align the errors or when a username is already taken return that information
+        is BaseAPIState.Error -> {
+            val errorMessage = (registrationState as BaseAPIState.Error).message
+            val showDialog = remember { mutableStateOf(true)}
+            PopUpComponent(stringResource(R.string.error), errorMessage.toString(), showDialog)
+            Log.d("RegisterView", errorMessage.toString())
+        }
+    }
+
+
     Surface(
         color = Color.White,
         modifier = Modifier.fillMaxSize()
             .background(Color.White)
     ){
+        Log.d("RegisterView", "Start the View")
         Column(modifier = Modifier.fillMaxSize()
             .padding(30.dp)) {
             NormalTextComponent(value = stringResource(id = R.string.hello))
             HeaderTextComponent(value = stringResource(id = R.string.createAcc))
             Spacer(modifier = Modifier.height(20.dp))
-            StandTextField(labelValue = stringResource(id = R.string.fName), painterResource(id = R.drawable.crystal))
-            StandTextField(labelValue = stringResource(id = R.string.lName), painterResource(id = R.drawable.crystal))
-            StandTextField(labelValue = stringResource(id = R.string.email), painterResource(id = R.drawable.crystal))
-            StandTextField(labelValue = stringResource(id = R.string.username), painterResource(id = R.drawable.crystal))
-            PasswordTextField(labelValue = stringResource(id = R.string.password), painterResource(id = R.drawable.crystal)) //Todo: should I check some textfields by having user reenter the same value.
+            StandTextField(labelValue = stringResource(id = R.string.fName), painterResource(id = R.drawable.crystal),setFname, firstName)
+            StandTextField(labelValue = stringResource(id = R.string.lName), painterResource(id = R.drawable.crystal), setLname, lastName)
+            StandTextField(labelValue = stringResource(id = R.string.email), painterResource(id = R.drawable.crystal), setEmail, email)
+            StandTextField(labelValue = stringResource(id = R.string.username), painterResource(id = R.drawable.crystal), setUsername, username)
+            PasswordTextField(labelValue = stringResource(id = R.string.password), painterResource(id = R.drawable.crystal), setPassword, password) //Todo: should I check some textfields by having user reenter the same value.
             CheckBoxComponent(value = stringResource(id = R.string.message), onTextSelected = {
                 NavRouter.navigateTo(Screen.TermsAndConditions)
             })
+
+            //Check that values are set properly
+            Log.d("RegisterView", "$firstName $lastName $email $username $password")
+
             Spacer(modifier = Modifier.height(40.dp))
-            ButtonComponent(value = stringResource(id = R.string.register))
+            ButtonComponent(value = stringResource(id = R.string.register), onButtonClicked = {viewModel.registerUser(firstName, lastName, email, username, password)})
+
+            Log.d("RegisterView", "Button Clicked")
             Spacer(modifier = Modifier.height(20.dp))
             DividerTextComponent()
             Spacer(modifier = Modifier.height(40.dp))
@@ -51,5 +92,5 @@ fun RegisterView(){
 @Preview
 @Composable
 fun DefaultPreviewRegisterView() {
-    RegisterView()
+    RegisterView(viewModel = viewModel())
 }

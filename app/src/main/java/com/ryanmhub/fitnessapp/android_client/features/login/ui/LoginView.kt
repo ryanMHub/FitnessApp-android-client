@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -18,6 +20,10 @@ import com.ryanmhub.fitnessapp.android_client.common.components.*
 
 @Composable
 fun LoginView(){
+
+    val (username, setUsername) = remember { mutableStateOf("")}
+    val (password, setPassword) = remember { mutableStateOf("")}
+
     Surface(
         color = Color.White,
         modifier = Modifier.fillMaxSize()
@@ -28,12 +34,12 @@ fun LoginView(){
             NormalTextComponent(value = stringResource(id = R.string.login))
             HeaderTextComponent(value = stringResource(id = R.string.welcome))
             Spacer(modifier = Modifier.height(20.dp))
-            StandTextField(labelValue = stringResource(id = R.string.username), painterResource(id = R.drawable.crystal))
-            PasswordTextField(labelValue = stringResource(id = R.string.password), painterResource(id = R.drawable.crystal)) //Todo: should I check some textfields by having user reenter the same value.
+            StandTextField(labelValue = stringResource(id = R.string.username), painterResource(id = R.drawable.crystal), setUsername, username)
+            PasswordTextField(labelValue = stringResource(id = R.string.password), painterResource(id = R.drawable.crystal), setPassword, password) //Todo: should I check some textfields by having user reenter the same value.
             Spacer(modifier = Modifier.height(40.dp))
             UnderLinedTextComponent(value = stringResource(id = R.string.forgt_password))
             Spacer(modifier = Modifier.height(40.dp))
-            ButtonComponent(value = stringResource(id = R.string.login))
+            ButtonComponent(value = stringResource(id = R.string.login), {})
             Spacer(modifier = Modifier.height(20.dp))
             DividerTextComponent()
             Spacer(modifier = Modifier.height(40.dp))
