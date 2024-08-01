@@ -16,5 +16,6 @@ open class BaseAPIState<out T: Any>(){
     //class Loading<T> :
     class Loading : BaseAPIState<Nothing>()
     class Success<out T : Any>(val data : T?) : BaseAPIState<T>()
+    class Failed<out T : Any>(val data : T?) : BaseAPIState<T>()
     class Error(val message: String?) : BaseAPIState<Nothing>()
 }

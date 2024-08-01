@@ -25,7 +25,7 @@ fun FitnessApp() {
                     TermsAndConditions()
                 }
                 is Screen.LoginView -> {
-                    LoginView()
+                    LoginView(viewModel = viewModel())
                 }
             }
         }

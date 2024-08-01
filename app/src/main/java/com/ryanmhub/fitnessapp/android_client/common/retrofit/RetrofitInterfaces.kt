@@ -1,5 +1,7 @@
 package com.ryanmhub.fitnessapp.android_client.common.retrofit
 
+import com.ryanmhub.fitnessapp.android_client.features.login.data.LoginDTO
+import com.ryanmhub.fitnessapp.android_client.features.login.data.LoginResponse
 import com.ryanmhub.fitnessapp.android_client.features.register.data.RegisterDTO
 import com.ryanmhub.fitnessapp.android_client.features.register.data.RegisterResponse
 import retrofit2.Response
@@ -10,5 +12,7 @@ interface UserApiService {
     @POST("/api/auth/register")
     suspend fun registerUser(@Body request:RegisterDTO): Response<RegisterResponse>
 
+    @POST("/api/auth/login")
+    suspend fun loginUser(@Body request: LoginDTO) : Response<LoginResponse>
 
 }

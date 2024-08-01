@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -13,7 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ryanmhub.fitnessapp.android_client.app.FitnessApp
+import com.ryanmhub.fitnessapp.android_client.app.NavRouter
 import com.ryanmhub.fitnessapp.android_client.app.Screen
+import com.ryanmhub.fitnessapp.android_client.app.TermsAndConditions
+import com.ryanmhub.fitnessapp.android_client.features.login.ui.LoginView
 import com.ryanmhub.fitnessapp.android_client.features.register.ui.RegisterView
 import com.ryanmhub.fitnessapp.android_client.ui.theme.AndroidclientTheme
 
@@ -25,8 +29,20 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     Log.d("MainActivity","Hello World!")
-                    RegisterView(viewModel = viewModel())
-                    //FitnessApp()
+
+                    Crossfade(targetState = NavRouter.currScreen, label = ""){ currScreen ->
+                        when(currScreen.value) {
+                            is Screen.RegisterView -> {
+                                RegisterView(viewModel = viewModel())
+                            }
+                            is Screen.TermsAndConditions -> {
+                                TermsAndConditions()
+                            }
+                            is Screen.LoginView -> {
+                                LoginView(viewModel = viewModel())
+                            }
+                        }
+                    }
                 }
             }
         }

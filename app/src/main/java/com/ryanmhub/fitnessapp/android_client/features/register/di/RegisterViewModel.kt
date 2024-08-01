@@ -28,9 +28,14 @@ class RegisterViewModel() : ViewModel() {
                 val request = RegisterDTO(firstName, lastName, username,email, password)
                 Log.d("RegisterViewModel", request.toString())
                 val response = RetrofitInstances.userService.registerUser(request)
+                Log.d("RegisterViewModel", response.headers().toString())
                 Log.d("RegisterViewModel", response.body().toString())
                 if(response.isSuccessful){
-                    _registrationState.value = BaseAPIState.Success(response.body())
+                    if(response.body()?.success == true){
+                        _registrationState.value = BaseAPIState.Success(response.body())
+                    } else {
+                        _registrationState.value = BaseAPIState.Failed(response.body())
+                    }
                 } else {
                     _registrationState.value = BaseAPIState.Error(response.message())
                 }

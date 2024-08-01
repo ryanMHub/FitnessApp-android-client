@@ -24,5 +24,6 @@
     <string name="ok">Ok</string>
     <string name="success">Success</string>
     <string name="error">Error</string>
+    <string name="failed">Failed</string>
 
 </resources>
