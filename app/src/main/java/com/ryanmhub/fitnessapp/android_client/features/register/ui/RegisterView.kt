@@ -1,5 +1,6 @@
 package com.ryanmhub.fitnessapp.android_client.features.register.ui
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -8,6 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -17,13 +19,23 @@ import com.ryanmhub.fitnessapp.android_client.R
 import com.ryanmhub.fitnessapp.android_client.app.NavRouter
 import com.ryanmhub.fitnessapp.android_client.app.Screen
 import com.ryanmhub.fitnessapp.android_client.common.components.*
+import com.ryanmhub.fitnessapp.android_client.common.encryption.KeyStoreConfig
 import com.ryanmhub.fitnessapp.android_client.common.state.BaseAPIState
 import com.ryanmhub.fitnessapp.android_client.features.register.di.RegisterViewModel
 
+@OptIn(ExperimentalStdlibApi::class)
 @Composable
 fun RegisterView(viewModel: RegisterViewModel){
     //connect to state machine in viewModel
     val registrationState by viewModel.registrationState //Todo: Should this be remember by
+
+    //Todo: Testing encryption currently working remove later. Maybe I should figure out how to implement the unit testing in intellij
+//    val testData = "Dog Water Loves Chicken"
+//    Log.d("Test Starting String", testData)
+//    val value = KeyStoreConfig.encryptData(testData.toByteArray())
+//    Log.d("Test Encrypt", value.toHexString())
+//    val newValue = KeyStoreConfig.decryptData(value)
+//    Log.d("Test Decrypt", String(newValue))
 
     //Todo: remember to remove test values
     //Textfields mutable states
@@ -33,7 +45,8 @@ fun RegisterView(viewModel: RegisterViewModel){
     val (username, setUsername) = remember {mutableStateOf("rmosk")}
     val (password, setPassword) = remember {mutableStateOf("123abc")}
 
-    //State Machine action controller
+    //State Machine action controller Todo: Figure out an approach that is reusable
+    //Todo: Do I need to add additional actions for states
     when(registrationState){
         is BaseAPIState.Loading -> {
             CircularProgressIndicator()

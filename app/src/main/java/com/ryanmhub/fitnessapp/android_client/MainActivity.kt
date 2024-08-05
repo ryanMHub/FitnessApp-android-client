@@ -13,14 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.ryanmhub.fitnessapp.android_client.app.FitnessApp
-import com.ryanmhub.fitnessapp.android_client.app.NavRouter
-import com.ryanmhub.fitnessapp.android_client.app.Screen
-import com.ryanmhub.fitnessapp.android_client.app.TermsAndConditions
+import com.ryanmhub.fitnessapp.android_client.app.*
 import com.ryanmhub.fitnessapp.android_client.features.login.ui.LoginView
 import com.ryanmhub.fitnessapp.android_client.features.register.ui.RegisterView
 import com.ryanmhub.fitnessapp.android_client.ui.theme.AndroidclientTheme
 
+
+//Todo: Should I try to move all important objects that can be used as a singleton to the FitnessApp::Application class, Maybe Retrofit, etc
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +45,8 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
+        logSharedPrefsAccess(applicationContext, "master_key_preference")
     }
 }
 

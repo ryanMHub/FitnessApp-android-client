@@ -80,8 +80,9 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
 
-    //EncryptedSharedPreferences
-
+    //EncryptedSharedPreferences Using DataStore and Tink
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+    implementation("com.google.crypto.tink:tink-android:1.6.1")
 
     implementation("androidx.core:core-ktx:1.13.1")
 

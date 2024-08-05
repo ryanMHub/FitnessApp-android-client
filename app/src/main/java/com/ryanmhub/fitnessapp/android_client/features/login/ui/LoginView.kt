@@ -39,8 +39,8 @@ fun LoginView(viewModel: LoginViewModel){
         is BaseAPIState.Success -> {
             val data = (loginState as BaseAPIState.Success).data
             val showDialog = remember { mutableStateOf(true)}
-            PopUpComponent(stringResource(R.string.success), data?.message, showDialog)
-            Log.d("LoginView","${data?.success}" + "  " + "${data?.message}")
+            PopUpComponent(stringResource(R.string.success),"${data?.success} ${data?.message} ${data?.accessToken} ${data?.refreshToken}", showDialog)
+            Log.d("LoginView","${data?.success}" + "  " + "${data?.message}" + "${data?.accessToken}" + "${data?.refreshToken}")
             //Todo: How should I appropriately handle navigation to Home Dashboard
         }
         is BaseAPIState.Failed -> {
