@@ -8,6 +8,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -16,9 +17,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ryanmhub.fitnessapp.android_client.R
 import com.ryanmhub.fitnessapp.android_client.app.NavRouter
 import com.ryanmhub.fitnessapp.android_client.app.Screen
+import com.ryanmhub.fitnessapp.android_client.common.authDataStore
 import com.ryanmhub.fitnessapp.android_client.common.components.*
+import com.ryanmhub.fitnessapp.android_client.common.getEncryptedData
 import com.ryanmhub.fitnessapp.android_client.common.state.BaseAPIState
 import com.ryanmhub.fitnessapp.android_client.features.login.di.LoginViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 
 @Composable
@@ -39,9 +44,31 @@ fun LoginView(viewModel: LoginViewModel){
         is BaseAPIState.Success -> {
             val data = (loginState as BaseAPIState.Success).data
             val showDialog = remember { mutableStateOf(true)}
+            //Todo: You only need the popup if the login is not successful, otherwise the app should got to dashboard
             PopUpComponent(stringResource(R.string.success),"${data?.success} ${data?.message} ${data?.accessToken} ${data?.refreshToken}", showDialog)
             Log.d("LoginView","${data?.success}" + "  " + "${data?.message}" + "${data?.accessToken}" + "${data?.refreshToken}")
-            //Todo: How should I appropriately handle navigation to Home Dashboard
+            viewModel.saveTokenDataStore(LocalContext.current.authDataStore, stringResource(R.string.access_token), data?.accessToken ?: "NA")
+            viewModel.saveTokenDataStore(LocalContext.current.authDataStore,
+                stringResource(R.string.refresh_token), data?.refreshToken ?: "NA")
+
+
+            //Todo: This is a Test to see if the dataSource is working remove when done
+//            val accessFlow = viewModel.testGetTokenData(LocalContext.current.authDataStore, stringResource(R.string.access_token))
+//            val refreshFlow = viewModel.testGetTokenData(LocalContext.current.authDataStore, stringResource(R.string.refresh_token))
+//            var accessToken by remember { mutableStateOf<String?>(null)}
+//            var refreshToken by remember { mutableStateOf<String?>(null)}
+//            LaunchedEffect(accessToken){
+//                accessFlow.collect { value ->
+//                    accessToken = value
+//                }
+//            }
+//            LaunchedEffect(refreshToken){
+//                refreshFlow.collect { value ->
+//                    refreshToken = value
+//                }
+//            }
+//            PopUpComponent(stringResource(R.string.success), "$accessToken put a lot of stuff here $refreshToken", showDialog)
+            //Todo: How should I appropriately handle navigation to Home Dashboard, and adding access token to the header.
         }
         is BaseAPIState.Failed -> {
             val data = (loginState as BaseAPIState.Failed).data

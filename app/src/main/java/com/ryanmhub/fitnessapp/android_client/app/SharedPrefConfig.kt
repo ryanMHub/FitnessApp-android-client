@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import java.io.File
 
+//Todo: Should probably delete
 fun logSharedPrefsAccess(context: Context, fileName: String){
     try{
         checkSharedPreferencesExists(context, fileName)

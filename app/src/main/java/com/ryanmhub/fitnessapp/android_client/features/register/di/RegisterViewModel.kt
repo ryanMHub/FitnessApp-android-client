@@ -6,11 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ryanmhub.fitnessapp.android_client.common.retrofit.RetrofitInstances
-import com.ryanmhub.fitnessapp.android_client.common.retrofit.UserApiService
 import com.ryanmhub.fitnessapp.android_client.common.state.BaseAPIState
-import com.ryanmhub.fitnessapp.android_client.features.register.data.RegisterDTO
+import com.ryanmhub.fitnessapp.android_client.common.data.UserDTO
 import com.ryanmhub.fitnessapp.android_client.features.register.data.RegisterResponse
-import com.ryanmhub.fitnessapp.android_client.features.register.data.RegisterState
 import kotlinx.coroutines.launch
 
 //Todo: What approach should I use to catch exceptions
@@ -25,7 +23,7 @@ class RegisterViewModel() : ViewModel() {
 
             try{
                 Log.d("RegisterViewModel", "Starting register")
-                val request = RegisterDTO(firstName, lastName, username,email, password)
+                val request = UserDTO(firstName, lastName, username,email, password)
                 Log.d("RegisterViewModel", request.toString())
                 val response = RetrofitInstances.userService.registerUser(request)
                 Log.d("RegisterViewModel", response.headers().toString())

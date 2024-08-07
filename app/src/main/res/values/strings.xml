@@ -25,5 +25,7 @@
     <string name="success">Success</string>
     <string name="error">Error</string>
     <string name="failed">Failed</string>
+    <string name="access_token">access_token</string>
+    <string name="refresh_token">refresh_token</string>
 
 </resources>

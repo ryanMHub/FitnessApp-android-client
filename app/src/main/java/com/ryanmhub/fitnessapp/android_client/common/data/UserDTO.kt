@@ -1,6 +1,6 @@
-package com.ryanmhub.fitnessapp.android_client.features.register.data
+package com.ryanmhub.fitnessapp.android_client.common.data
 
-data class RegisterDTO(
+data class UserDTO(
     val firstName: String,
     val lastName: String,
     val username: String,

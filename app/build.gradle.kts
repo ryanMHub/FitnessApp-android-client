@@ -82,7 +82,7 @@ dependencies {
 
     //EncryptedSharedPreferences Using DataStore and Tink
     implementation("androidx.datastore:datastore-preferences:1.1.1")
-    implementation("com.google.crypto.tink:tink-android:1.6.1")
+    implementation("androidx.datastore:datastore:1.1.1")
 
     implementation("androidx.core:core-ktx:1.13.1")
 
