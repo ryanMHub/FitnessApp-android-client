@@ -1,6 +1,5 @@
 package com.ryanmhub.fitnessapp.android_client.features.register.ui
 
-import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -9,17 +8,15 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ryanmhub.fitnessapp.android_client.R
-import com.ryanmhub.fitnessapp.android_client.app.NavRouter
-import com.ryanmhub.fitnessapp.android_client.app.Screen
+import com.ryanmhub.fitnessapp.android_client.common.nav.NavRouter
+import com.ryanmhub.fitnessapp.android_client.common.nav.Screen
 import com.ryanmhub.fitnessapp.android_client.common.components.*
-import com.ryanmhub.fitnessapp.android_client.common.encryption.KeyStoreConfig
 import com.ryanmhub.fitnessapp.android_client.common.state.BaseAPIState
 import com.ryanmhub.fitnessapp.android_client.features.register.di.RegisterViewModel
 

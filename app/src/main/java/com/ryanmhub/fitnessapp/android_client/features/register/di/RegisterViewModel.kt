@@ -5,15 +5,16 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ryanmhub.fitnessapp.android_client.common.retrofit.RetrofitInstances
 import com.ryanmhub.fitnessapp.android_client.common.state.BaseAPIState
 import com.ryanmhub.fitnessapp.android_client.common.data.UserDTO
+import com.ryanmhub.fitnessapp.android_client.features.register.data.RegisterApi
 import com.ryanmhub.fitnessapp.android_client.features.register.data.RegisterResponse
 import kotlinx.coroutines.launch
 
 //Todo: What approach should I use to catch exceptions
 //Todo: update state machine to universal model
 class RegisterViewModel() : ViewModel() {
+    private val _registerApiService = RegisterApi.create()
     private val _registrationState = mutableStateOf<BaseAPIState<RegisterResponse>>(BaseAPIState.Loading)
     val registrationState : State<BaseAPIState<RegisterResponse>> = _registrationState
 
@@ -21,11 +22,16 @@ class RegisterViewModel() : ViewModel() {
         viewModelScope.launch {
             _registrationState.value = BaseAPIState.Loading
 
+            if(_registerApiService==null) {
+                Log.d("RegisterViewModel","registerApiService is null")
+                return@launch
+            }
+
             try{
                 Log.d("RegisterViewModel", "Starting register")
                 val request = UserDTO(firstName, lastName, username,email, password)
                 Log.d("RegisterViewModel", request.toString())
-                val response = RetrofitInstances.userService.registerUser(request)
+                val response = _registerApiService.registerUser(request)
                 Log.d("RegisterViewModel", response.headers().toString())
                 Log.d("RegisterViewModel", response.body().toString())
                 if(response.isSuccessful){

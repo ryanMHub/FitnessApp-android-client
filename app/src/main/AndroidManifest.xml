@@ -6,6 +6,7 @@
 
     <!-- Todo: Remove usesCleartextTraffic once https is setup -->
     <application
+            android:name="com.ryanmhub.fitnessapp.android_client.app.FitnessApp"
             android:usesCleartextTraffic="true"
             android:allowBackup="true"
             android:dataExtractionRules="@xml/data_extraction_rules"

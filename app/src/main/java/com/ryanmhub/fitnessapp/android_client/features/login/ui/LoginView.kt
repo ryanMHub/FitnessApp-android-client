@@ -15,20 +15,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ryanmhub.fitnessapp.android_client.R
-import com.ryanmhub.fitnessapp.android_client.app.NavRouter
-import com.ryanmhub.fitnessapp.android_client.app.Screen
-import com.ryanmhub.fitnessapp.android_client.common.authDataStore
+import com.ryanmhub.fitnessapp.android_client.common.nav.NavRouter
+import com.ryanmhub.fitnessapp.android_client.common.nav.Screen
 import com.ryanmhub.fitnessapp.android_client.common.components.*
-import com.ryanmhub.fitnessapp.android_client.common.getEncryptedData
+import com.ryanmhub.fitnessapp.android_client.common.data_store.EncryptedDataManager
+import com.ryanmhub.fitnessapp.android_client.common.data_store.authDataStore
 import com.ryanmhub.fitnessapp.android_client.common.state.BaseAPIState
+import com.ryanmhub.fitnessapp.android_client.features.dashboard.ui.DashboardView
 import com.ryanmhub.fitnessapp.android_client.features.login.di.LoginViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 
 @Composable
 fun LoginView(viewModel: LoginViewModel){
 
+    val encryptedDataManager = EncryptedDataManager(LocalContext.current.authDataStore)
     val loginState by viewModel.loginState
 
     //Todo: remember to remove test values
@@ -45,12 +45,15 @@ fun LoginView(viewModel: LoginViewModel){
             val data = (loginState as BaseAPIState.Success).data
             val showDialog = remember { mutableStateOf(true)}
             //Todo: You only need the popup if the login is not successful, otherwise the app should got to dashboard
-            PopUpComponent(stringResource(R.string.success),"${data?.success} ${data?.message} ${data?.accessToken} ${data?.refreshToken}", showDialog)
+            //PopUpComponent(stringResource(R.string.success),"${data?.success} ${data?.message} ${data?.accessToken} ${data?.refreshToken}", showDialog)
             Log.d("LoginView","${data?.success}" + "  " + "${data?.message}" + "${data?.accessToken}" + "${data?.refreshToken}")
-            viewModel.saveTokenDataStore(LocalContext.current.authDataStore, stringResource(R.string.access_token), data?.accessToken ?: "NA")
-            viewModel.saveTokenDataStore(LocalContext.current.authDataStore,
+
+            viewModel.saveTokenDataStore(encryptedDataManager,
+                stringResource(R.string.access_token), data?.accessToken ?: "NA")
+            viewModel.saveTokenDataStore(encryptedDataManager,
                 stringResource(R.string.refresh_token), data?.refreshToken ?: "NA")
 
+            NavRouter.navigateTo(Screen.DashboardView)
 
             //Todo: This is a Test to see if the dataSource is working remove when done
 //            val accessFlow = viewModel.testGetTokenData(LocalContext.current.authDataStore, stringResource(R.string.access_token))

@@ -14,6 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ryanmhub.fitnessapp.android_client.app.*
+import com.ryanmhub.fitnessapp.android_client.common.data_store.authDataStore
+import com.ryanmhub.fitnessapp.android_client.common.nav.NavRouter
+import com.ryanmhub.fitnessapp.android_client.common.nav.Screen
+import com.ryanmhub.fitnessapp.android_client.common.retrofit.RetrofitInstances
+import com.ryanmhub.fitnessapp.android_client.features.dashboard.ui.DashboardView
 import com.ryanmhub.fitnessapp.android_client.features.login.ui.LoginView
 import com.ryanmhub.fitnessapp.android_client.features.register.ui.RegisterView
 import com.ryanmhub.fitnessapp.android_client.ui.theme.AndroidclientTheme
@@ -23,6 +28,7 @@ import com.ryanmhub.fitnessapp.android_client.ui.theme.AndroidclientTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//    Todo:    RetrofitInstances.setEncryptedDataManager(applicationContext.authDataStore)
         setContent {
             AndroidclientTheme {
                 // A surface container using the 'background' color from the theme
@@ -40,6 +46,9 @@ class MainActivity : ComponentActivity() {
                             is Screen.LoginView -> {
                                 LoginView(viewModel = viewModel())
                             }
+                            is Screen.DashboardView -> {
+                                DashboardView(viewModel = viewModel())
+                            }
                         }
                     }
                 }
@@ -47,21 +56,5 @@ class MainActivity : ComponentActivity() {
         }
 
         logSharedPrefsAccess(applicationContext, "master_key_preference")
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    AndroidclientTheme {
-        Greeting("I'm getting started on the login tomorrow")
     }
 }
