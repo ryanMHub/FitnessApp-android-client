@@ -13,11 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.ryanmhub.fitnessapp.android_client.app.*
 import com.ryanmhub.fitnessapp.android_client.common.data_store.authDataStore
 import com.ryanmhub.fitnessapp.android_client.common.nav.NavRouter
+import com.ryanmhub.fitnessapp.android_client.common.nav.PerimeterNavGraph
 import com.ryanmhub.fitnessapp.android_client.common.nav.Screen
-import com.ryanmhub.fitnessapp.android_client.common.retrofit.RetrofitInstances
 import com.ryanmhub.fitnessapp.android_client.features.dashboard.ui.DashboardView
 import com.ryanmhub.fitnessapp.android_client.features.login.ui.LoginView
 import com.ryanmhub.fitnessapp.android_client.features.register.ui.RegisterView
@@ -31,27 +33,29 @@ class MainActivity : ComponentActivity() {
 //    Todo:    RetrofitInstances.setEncryptedDataManager(applicationContext.authDataStore)
         setContent {
             AndroidclientTheme {
+                //MainScreen()
+                PerimeterNavGraph(rememberNavController())
                 // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    Log.d("MainActivity","Hello World!")
-
-                    Crossfade(targetState = NavRouter.currScreen, label = ""){ currScreen ->
-                        when(currScreen.value) {
-                            is Screen.RegisterView -> {
-                                RegisterView(viewModel = viewModel())
-                            }
-                            is Screen.TermsAndConditions -> {
-                                TermsAndConditions()
-                            }
-                            is Screen.LoginView -> {
-                                LoginView(viewModel = viewModel())
-                            }
-                            is Screen.DashboardView -> {
-                                DashboardView(viewModel = viewModel())
-                            }
-                        }
-                    }
-                }
+//                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+//                    Log.d("MainActivity","Hello World!")
+//
+//                    Crossfade(targetState = NavRouter.currScreen, label = ""){ currScreen ->
+//                        when(currScreen.value) {
+//                            is Screen.RegisterView -> {
+//                                RegisterView(viewModel = viewModel())
+//                            }
+//                            is Screen.TermsAndConditions -> {
+//                                TermsAndConditions()
+//                            }
+//                            is Screen.LoginView -> {
+//                                LoginView()
+//                            }
+//                            is Screen.DashboardView -> {
+//                                DashboardView(viewModel = viewModel())
+//                            }
+//                        }
+//                    }
+//                }
             }
         }
 

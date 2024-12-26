@@ -8,18 +8,12 @@ import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 
-//Todo: Should I save the generated key as Constant or Singleton on application start up. Generate one if it doesn't exist, store the current if it does.
-//Todo: Should I make this a class
-
-//Todo: Move these constants to a better location maybe R.strings
-
 object KeyStoreConfig {
     private val keyAlias = "KeyAlias"
     private val keyStoreAddress = "AndroidKeyStore"
     private val cipherCode = "AES/GCM/NoPadding"
     private val ivLength = 12
     private val tagLength = 128
-    //Todo: try adding cipher instance here
     private var secretKey: SecretKey? = null
 
     //Lazy initialize the keystore in this singleton

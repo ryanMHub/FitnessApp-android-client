@@ -9,6 +9,7 @@ data class DFA(
 
 )
 
+//todo: should the generic be more specified
 open class BaseAPIState<out T: Any>(){
     companion object {
         val Loading = BaseAPIState<Nothing>() //Todo: Should I initialize this differently

@@ -14,11 +14,14 @@
     <string name="password">Password</string>
     <string name="hidePassword">Hide Text</string>
     <string name="showPassword">Show Text</string>
+
     <string name="message">Add a message here</string>
     <string name="register">Register</string>
     <string name="or">"or"</string>
     <string name="already_registered">"Already registered? "</string>
     <string name="login">Login</string>
+    <string name="logout_message">"Would you like to "</string>
+    <string name="logout">Logout</string>
     <string name="forgt_password">Forgot your password?</string>
     <string name="no_account">"Don't have an account yet? "</string>
     <string name="ok">Ok</string>
@@ -29,5 +32,7 @@
     <string name="refresh_token">refresh_token</string>
     <string name="authorization">Authorization</string>
     <string name="bearer">Bearer</string>
+    <string name="verify_password">Verify Password</string>
+    <string name="password_incorrect">* - Password incorrect</string>
 
 </resources>

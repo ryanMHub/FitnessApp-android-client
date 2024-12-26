@@ -3,6 +3,7 @@ package com.ryanmhub.fitnessapp.android_client.common.retrofit
 import android.util.Log
 import androidx.compose.ui.res.stringResource
 import com.ryanmhub.fitnessapp.android_client.R
+import com.ryanmhub.fitnessapp.android_client.common.constants.StringConstants
 import com.ryanmhub.fitnessapp.android_client.common.data_store.EncryptedDataManager
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -10,14 +11,6 @@ import okhttp3.Interceptor
 import okhttp3.Response
 
 class AuthInterceptor(private val encryptedDataManager: EncryptedDataManager) : Interceptor {
-
-    //Todo: Create a const string file for all common literals outside of composables
-    companion object {
-        const val ACCESS_TOKEN = "access_token"
-        const val REFRESH_TOKEN = "refresh_token"
-        const val AUTHORIZATION = "Authorization"
-        const val TOKEN_TYPE = "Bearer"
-    }
 
     private val whiteList = listOf(
         "/api/auth/register",
@@ -40,14 +33,14 @@ class AuthInterceptor(private val encryptedDataManager: EncryptedDataManager) : 
         //add Access Token to header if url is not whitelisted
         val token: String? = runBlocking {
             if(refreshList.any { url.contains(it) }) {
-                encryptedDataManager.getEncryptedData(REFRESH_TOKEN).first()
+                encryptedDataManager.getEncryptedData(StringConstants.REFRESH_TOKEN).first()
             } else {
-                encryptedDataManager.getEncryptedData(ACCESS_TOKEN).first()
+                encryptedDataManager.getEncryptedData(StringConstants.ACCESS_TOKEN).first()
             }
         }
 
         val authenticatedRequest = request.newBuilder()
-            .addHeader(AUTHORIZATION, "$TOKEN_TYPE $token")
+            .addHeader(StringConstants.AUTHORIZATION, "${StringConstants.TOKEN_TYPE} $token")
             .build()
 
         Log.d("AuthInterceptor", "Returing authenticated request: $authenticatedRequest")

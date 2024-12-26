@@ -27,7 +27,7 @@ object RetrofitSingleton {
                     this.level = HttpLoggingInterceptor.Level.BODY
                 })
                 .addInterceptor(AuthInterceptor(encryptedDataManager))
-                .authenticator(AuthAuthenticator(encryptedDataManager)) //todo: should I create an instance once for this AuthAuthenticator and AuthInterceptor
+                .authenticator(AuthAuthenticator(encryptedDataManager))
                 .build())
             .addConverterFactory(GsonConverterFactory.create())
             .build()

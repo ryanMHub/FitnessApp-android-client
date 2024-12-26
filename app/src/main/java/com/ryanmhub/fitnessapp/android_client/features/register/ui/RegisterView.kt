@@ -22,9 +22,9 @@ import com.ryanmhub.fitnessapp.android_client.features.register.di.RegisterViewM
 
 @OptIn(ExperimentalStdlibApi::class)
 @Composable
-fun RegisterView(viewModel: RegisterViewModel){
+fun RegisterView(viewModel: RegisterViewModel, onNavigateToLogin: () -> Unit){
     //connect to state machine in viewModel
-    val registrationState by viewModel.registrationState //Todo: Should this be remember by
+    val registrationState by viewModel.registrationState
 
     //Todo: Testing encryption currently working remove later. Maybe I should figure out how to implement the unit testing in intellij
 //    val testData = "Dog Water Loves Chicken"
@@ -40,10 +40,14 @@ fun RegisterView(viewModel: RegisterViewModel){
     val (lastName, setLname) = remember {mutableStateOf("Moskovciak")}
     val (email, setEmail) = remember {mutableStateOf("rmoskovciak@gmail.com")}
     val (username, setUsername) = remember {mutableStateOf("rmosk")}
-    val (password, setPassword) = remember {mutableStateOf("123abc")}
 
-    //State Machine action controller Todo: Figure out an approach that is reusable
-    //Todo: Do I need to add additional actions for states
+    //validation through ViewModel
+    val password by viewModel.password
+    val verPass by viewModel.verPass
+    val errorMessage by viewModel.errorMessage
+    val canRegister by viewModel.canRegister
+
+    //State Machine action controller
     when(registrationState){
         is BaseAPIState.Loading -> {
             CircularProgressIndicator()
@@ -51,10 +55,8 @@ fun RegisterView(viewModel: RegisterViewModel){
         is BaseAPIState.Success -> {
             val data = (registrationState as BaseAPIState.Success).data
             val showDialog = remember { mutableStateOf(true)}
-            PopUpComponent(stringResource(R.string.success), data?.message, showDialog)
+            //PopUpComponent(stringResource(R.string.success), data?.message, showDialog)
             Log.d("RegisterView","${data?.success}" + "  " + "${data?.message}")
-            //Todo: How should I appropriately handle navigation to login, or should user automatically be logged in
-            if(!showDialog.value) NavRouter.navigateTo(Screen.LoginView)
         }
         is BaseAPIState.Failed -> {
             val data = (registrationState as BaseAPIState.Failed).data
@@ -84,27 +86,36 @@ fun RegisterView(viewModel: RegisterViewModel){
             NormalTextComponent(value = stringResource(id = R.string.hello))
             HeaderTextComponent(value = stringResource(id = R.string.createAcc))
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             //Textfields to enter data points for new user
             StandTextField(labelValue = stringResource(id = R.string.fName), painterResource(id = R.drawable.crystal),setFname, firstName)
             StandTextField(labelValue = stringResource(id = R.string.lName), painterResource(id = R.drawable.crystal), setLname, lastName)
             StandTextField(labelValue = stringResource(id = R.string.email), painterResource(id = R.drawable.crystal), setEmail, email)
             StandTextField(labelValue = stringResource(id = R.string.username), painterResource(id = R.drawable.crystal), setUsername, username)
-            PasswordTextField(labelValue = stringResource(id = R.string.password), painterResource(id = R.drawable.crystal), setPassword, password) //Todo: should I check some textfields by having user reenter the same value.
+
+            //verify user input for passwords
+            PasswordTextField(labelValue = stringResource(R.string.password), painterResource(id = R.drawable.crystal), viewModel::onPasswordChange, password)
+            PasswordTextField(labelValue = stringResource(id = R.string.verify_password), painterResource(id = R.drawable.crystal), viewModel::onVerPassChange, verPass)
 
             //Terms and Conditions approval checkbox
             CheckBoxComponent(value = stringResource(id = R.string.message), onTextSelected = {
                 NavRouter.navigateTo(Screen.TermsAndConditions)
             })
 
+            ErrorTextComponent(value = errorMessage)
+
+
             //Check that values are set properly
             Log.d("RegisterView", "$firstName $lastName $email $username $password")
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             //Call to RegisterViewModel to attempt user registration
-            ButtonComponent(value = stringResource(id = R.string.register), onButtonClicked = {viewModel.registerUser(firstName, lastName, email, username, password)})
+            ButtonComponent(value = stringResource(id = R.string.register), canRegister, onButtonClicked = {
+                viewModel.registerUser(firstName, lastName, email, username, password)
+                onNavigateToLogin()
+            })
 
             Log.d("RegisterView", "Button Clicked")
 
@@ -115,7 +126,8 @@ fun RegisterView(viewModel: RegisterViewModel){
 
             //Already have an account navigate to LoginView
             ClickableTextComponentEnding(initialText = stringResource(id = R.string.already_registered), ending = stringResource(id = R.string.login), onTextSelected = {
-                NavRouter.navigateTo(Screen.LoginView)
+                //NavRouter.navigateTo(Screen.LoginView)
+                onNavigateToLogin()
             })
         }
 
@@ -125,5 +137,5 @@ fun RegisterView(viewModel: RegisterViewModel){
 @Preview
 @Composable
 fun DefaultPreviewRegisterView() {
-    RegisterView(viewModel = viewModel())
+    RegisterView(viewModel = viewModel(), { println("hello") })
 }

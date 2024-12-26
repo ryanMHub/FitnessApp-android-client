@@ -42,7 +42,7 @@ import com.ryanmhub.fitnessapp.android_client.ui.theme.*
 fun NormalTextComponent(value: String){
     Text(
         text = value,
-        modifier = Modifier.fillMaxWidth().heightIn(min = 40.dp),
+        modifier = Modifier.fillMaxWidth().heightIn(min = 26.dp),
         style = TextStyle(
             fontSize = 24.sp,
             fontWeight = FontWeight.Normal,
@@ -73,7 +73,7 @@ fun UnderLinedTextComponent(value: String){
 fun HeaderTextComponent(value: String){
     Text(
         text = value,
-        modifier = Modifier.fillMaxWidth().heightIn(),
+        modifier = Modifier.fillMaxWidth().heightIn(min = 31.dp),
         style = TextStyle(
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
@@ -84,12 +84,26 @@ fun HeaderTextComponent(value: String){
     )
 }
 
-//Todo: I'm not sure if .color() is the right approach here. Border color is not changing
+@Composable
+fun ErrorTextComponent(value: String){
+    Text(
+        text = value,
+        modifier = Modifier.fillMaxWidth().heightIn(min = 20.dp),
+        style = TextStyle(
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Normal,
+            fontStyle = FontStyle.Normal
+        ),
+        color = colorResource(id = R.color.red),
+        textAlign = TextAlign.Center
+    )
+}
+
 @Composable
 fun StandTextField(labelValue : String, painter: Painter, onTextChanged: (String) -> Unit, textValue : String){
 
     OutlinedTextField(
-        modifier = Modifier.fillMaxWidth().clip(componentShapes.small),
+        modifier = Modifier.fillMaxWidth().clip(componentShapes.small).heightIn(min = 10.dp),
         label = {Text(text = labelValue)},
         colors = TextFieldDefaults.colors(
             focusedContainerColor = Primary,
@@ -110,7 +124,6 @@ fun StandTextField(labelValue : String, painter: Painter, onTextChanged: (String
 
 }
 
-//Todo: I'm not sure if .color() is the right approach here. Border color is not changing
 @Composable
 fun PasswordTextField(labelValue : String, painter: Painter, onTextChanged : (String) -> Unit, textValue : String){
     val localFocusManager = LocalFocusManager.current
@@ -184,7 +197,6 @@ fun CheckBoxComponent(value : String, onTextSelected: (String) -> Unit){
     }
 }
 
-//Todo: I'm going to have to delete this or make it generic
 @Composable
 fun ClickableTextComponent(value : String, onTextSelected: (String) -> Unit){
     val initialText = "By continuing you accept our "
@@ -216,7 +228,6 @@ fun ClickableTextComponent(value : String, onTextSelected: (String) -> Unit){
     })
 }
 
-//Todo: come up with a better approach for this component so that only one function is need instead of string specific
 @Composable
 fun ClickableTextComponentEnding(initialText : String, ending : String, onTextSelected: (String) -> Unit){
     val annotatedString = buildAnnotatedString {
@@ -249,11 +260,12 @@ fun ClickableTextComponentEnding(initialText : String, ending : String, onTextSe
 }
 
 @Composable
-fun ButtonComponent(value : String, onButtonClicked: () -> Unit){
+fun ButtonComponent(value : String, isEnabled : Boolean, onButtonClicked: () -> Unit){
     Button(onClick = onButtonClicked,
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(48.dp),
+        enabled = isEnabled,
         contentPadding = PaddingValues(),
         colors = ButtonDefaults.buttonColors(Color.Transparent)
         ) {

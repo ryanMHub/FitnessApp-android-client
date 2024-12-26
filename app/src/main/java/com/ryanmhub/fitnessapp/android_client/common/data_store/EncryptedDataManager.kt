@@ -27,7 +27,6 @@ class EncryptedDataManager(private val dataStore: DataStore<Preferences>) {
 
     }
 
-    //Todo: Focus on why the key is a different value between both functions after encrypting and encoding. Also why can't I get it to work without encrypting key.
     fun getEncryptedData(key: String) : Flow<String?> {
         Log.d("DataStore", "Starting Key: $key")
         val hashedKey = Base64.encodeToString(Hasher.hashData(key), Base64.DEFAULT)
@@ -41,6 +40,17 @@ class EncryptedDataManager(private val dataStore: DataStore<Preferences>) {
                 Log.d("DataStore", "Decrypted: ${String(decryptedData)}")
                 String(decryptedData)
             }
+        }
+    }
+
+    //clear tokens from datastore
+    suspend fun removeEncryptedData(key: String){
+        Log.d("DataStore", "Removing Key: $key")
+        val hashedKey = Base64.encodeToString(Hasher.hashData(key), Base64.DEFAULT)
+        val dataStoreKey = stringPreferencesKey(hashedKey)
+        Log.d("DataStore", dataStoreKey.toString())
+        dataStore.edit { item ->
+            item.remove(dataStoreKey)
         }
     }
 }

@@ -9,7 +9,7 @@ import com.ryanmhub.fitnessapp.android_client.common.nav.NavRouter
 import com.ryanmhub.fitnessapp.android_client.common.nav.Screen
 import com.ryanmhub.fitnessapp.android_client.common.nav.SystemBackButtonHandler
 
-//Todo: more than likely remove or convert for some other resason
+//Todo: more than likely remove or convert for some other reason
 @Composable
 fun TermsAndConditions() {
     Surface (modifier = Modifier.fillMaxSize()) {

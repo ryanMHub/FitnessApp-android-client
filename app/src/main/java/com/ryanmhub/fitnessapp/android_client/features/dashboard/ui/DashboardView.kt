@@ -1,10 +1,8 @@
 package com.ryanmhub.fitnessapp.android_client.features.dashboard.ui
 
 import android.util.Log
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
@@ -14,23 +12,53 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.material.Surface
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ryanmhub.fitnessapp.android_client.R
-import com.ryanmhub.fitnessapp.android_client.common.components.PopUpComponent
+import com.ryanmhub.fitnessapp.android_client.common.components.*
 import com.ryanmhub.fitnessapp.android_client.common.data.UserDTO
+import com.ryanmhub.fitnessapp.android_client.common.data_store.EncryptedDataManager
+import com.ryanmhub.fitnessapp.android_client.common.data_store.authDataStore
 import com.ryanmhub.fitnessapp.android_client.common.nav.NavRouter
 import com.ryanmhub.fitnessapp.android_client.common.nav.Screen
 import com.ryanmhub.fitnessapp.android_client.common.state.BaseAPIState
 import com.ryanmhub.fitnessapp.android_client.features.dashboard.di.DashboardViewModel
+import com.ryanmhub.fitnessapp.android_client.features.login.ui.LoginView
 
 @Composable
 fun DashboardView(viewModel: DashboardViewModel) {
 
+    //declare data Manager Todo: remove when logout relocation has occured
+    val encryptedDataManager = EncryptedDataManager(LocalContext.current.authDataStore)
+
     var userData by remember { mutableStateOf<UserDTO?>(null) }
-    //lateinit var userData: UserDTO Todo: possibly remove
-    //Todo: I need to fix how this state machine is working so I'm not always creating the same code everytime
+
     val dataState by viewModel.dataState
+
+    //Todo: temporary logout for testing remove when completed
+    val logoutState by viewModel.logoutState
+
+    when(logoutState){
+        is BaseAPIState.Loading -> {
+            CircularProgressIndicator()
+        }
+        is BaseAPIState.Success -> {
+            viewModel.removeTokenDataStore(encryptedDataManager, stringResource(R.string.access_token))
+            viewModel.removeTokenDataStore(encryptedDataManager, stringResource(R.string.refresh_token))
+            NavRouter.navigateTo(Screen.LoginView)
+        }
+        is BaseAPIState.Failed -> {
+            NavRouter.navigateTo(Screen.RegisterView)
+        }
+        is BaseAPIState.Error -> {
+
+        }
+    }
 
 
     //State Machine Controller
@@ -44,7 +72,6 @@ fun DashboardView(viewModel: DashboardViewModel) {
             Log.d("DashboardView", "${userData!!.firstName} ${userData!!.lastName}")
         }
         is BaseAPIState.Failed -> {
-            //Todo: is there even a use case for this option
         }
         is BaseAPIState.Error -> {
             val errorMessage = (dataState as BaseAPIState.Error).message
@@ -54,19 +81,39 @@ fun DashboardView(viewModel: DashboardViewModel) {
         }
     }
 
-    //Todo: Based on the Logcat the state is going Error-with no message, Success, Success. Why is it cycling three times?
-    //call api to get user data
-    if(userData==null){
-        viewModel.getUserData()
-    } else {
-        LazyColumn(modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)) {
-            items(listOf(userData!!)){ user -> //Todo: Not sure how good it is to use the forced non-null without an exception catcher
-                UserCard(user)
-            }
+   Surface(
+        color = Color.White,
+        modifier = Modifier.fillMaxSize()
+            .background(Color.White)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize()
+                .padding(30.dp)
+        ) {
+
+//            //Todo: temporary display of user data, remove when done with it
+//            //call api to get user data
+//            if(userData==null){
+//                viewModel.getUserData()
+//            } else {
+//                LazyColumn(modifier = Modifier
+//                    .fillMaxSize()
+//                    .padding(16.dp)) {
+//                    items(listOf(userData!!)){ user ->
+//                        UserCard(user)
+//                    }
+//                }
+//            }
+
+            //Todo: remove once global logout created
+            //logout link
+            ClickableTextComponentEnding(initialText = stringResource(id = R.string.logout_message), ending = stringResource(id = R.string.logout), onTextSelected = {
+                viewModel.logout()
+            })
         }
     }
+
+
 }
 
 @Composable
@@ -78,11 +125,17 @@ fun UserCard(user: UserDTO) {
         elevation = 4.dp
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = "First Name: ${user.username}", style = MaterialTheme.typography.body1)
+            Text(text = "User Name: ${user.username}", style = MaterialTheme.typography.body1)
             Text(text = "First Name: ${user.firstName}", style = MaterialTheme.typography.body2)
-            Text(text = "First Name: ${user.lastName}", style = MaterialTheme.typography.body2)
-            Text(text = "First Name: ${user.email}", style = MaterialTheme.typography.body2)
-            Text(text = "First Name: ${user.password}", style = MaterialTheme.typography.body2)
+            Text(text = "Last Name: ${user.lastName}", style = MaterialTheme.typography.body2)
+            Text(text = "Email: ${user.email}", style = MaterialTheme.typography.body2)
+            Text(text = "Password: ${user.password}", style = MaterialTheme.typography.body2)
         }
     }
+}
+
+@Preview
+@Composable
+fun DashboardViewPreview() {
+    DashboardView(viewModel = viewModel())
 }
