@@ -1,5 +1,6 @@
 package com.ryanmhub.fitnessapp.android_client.common.nav
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -35,7 +36,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun NavigationDrawerContent (
     navController: NavHostController,
-    drawerState: DrawerState,
+    scaffoldState: ScaffoldState,
     scope: CoroutineScope
 ) {
     val menuItems = listOf(
@@ -47,7 +48,7 @@ fun NavigationDrawerContent (
         Text("Menu", style = MaterialTheme.typography.h6)
         Spacer(modifier = Modifier.height(16.dp))
         menuItems.forEach { (screen, title) ->
-            DrawerMenuItem(title, screen.route, navController, drawerState, scope)
+            DrawerMenuItem(title, screen.route, navController, scaffoldState, scope)
 
         }
     }
@@ -59,7 +60,7 @@ fun DrawerMenuItem(
     title: String,
     route: String,
     navController: NavHostController,
-    drawerState: DrawerState,
+    scaffoldState: ScaffoldState,
     scope: CoroutineScope
 ) {
     val haptic = LocalHapticFeedback.current
@@ -76,7 +77,7 @@ fun DrawerMenuItem(
                     launchSingleTop = true
                     restoreState = true
                 }
-                scope.launch { drawerState.close() }
+                scope.launch { scaffoldState.drawerState.close() }
             }
             .padding(vertical = 8.dp),
         style = MaterialTheme.typography.body1
@@ -85,11 +86,15 @@ fun DrawerMenuItem(
 
 //adds the title and hamburger button to the top of the app
 @Composable
-fun TopAppBarWithHamburger(drawerState: DrawerState, scope: CoroutineScope){
+fun TopAppBarWithHamburger(scaffoldState: ScaffoldState, scope: CoroutineScope){
     TopAppBar(
         title = { Text("Fitness App") },
         navigationIcon = {
-            IconButton(onClick = { scope.launch { drawerState.open() } }) {
+            IconButton(onClick = {
+                Log.d("NavComponents", "Hamburger button clicked")
+                scope.launch { scaffoldState.drawerState.open() }
+                Log.d("NavComponents", "After button clicked")
+            }) {
                 Icon(Icons.Default.Menu, contentDescription = "Menu")
             }
         }

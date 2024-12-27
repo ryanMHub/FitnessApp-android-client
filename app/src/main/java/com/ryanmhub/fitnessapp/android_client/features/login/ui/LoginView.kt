@@ -36,7 +36,7 @@ fun LoginView( onNavigateToMain: () -> Unit, onNavigateToRegister: () -> Unit) {
     //Todo: remember to remove test values
     //Textfield mutable state
     val (username, setUsername) = remember { mutableStateOf("rmosk")}
-    val (password, setPassword) = remember { mutableStateOf("123abc")}
+    val (password, setPassword) = remember { mutableStateOf("12345678@A")}
 
     //State Machine Controller
     when(loginState){

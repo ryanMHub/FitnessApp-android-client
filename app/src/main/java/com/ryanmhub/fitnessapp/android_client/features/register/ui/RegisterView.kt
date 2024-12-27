@@ -47,7 +47,7 @@ fun RegisterView(viewModel: RegisterViewModel, onNavigateToLogin: () -> Unit){
     val errorMessage by viewModel.errorMessage
     val canRegister by viewModel.canRegister
 
-    //State Machine action controller
+    //State Machine action controller Todo: I'm not sure if this is needed, maybe able to take a different approach
     when(registrationState){
         is BaseAPIState.Loading -> {
             CircularProgressIndicator()
@@ -55,7 +55,7 @@ fun RegisterView(viewModel: RegisterViewModel, onNavigateToLogin: () -> Unit){
         is BaseAPIState.Success -> {
             val data = (registrationState as BaseAPIState.Success).data
             val showDialog = remember { mutableStateOf(true)}
-            //PopUpComponent(stringResource(R.string.success), data?.message, showDialog)
+            PopUpComponent(stringResource(R.string.success), data?.message, showDialog)
             Log.d("RegisterView","${data?.success}" + "  " + "${data?.message}")
         }
         is BaseAPIState.Failed -> {
@@ -111,6 +111,7 @@ fun RegisterView(viewModel: RegisterViewModel, onNavigateToLogin: () -> Unit){
 
             Spacer(modifier = Modifier.height(10.dp))
 
+            //Todo: Make it so if login fails user goes back to the registration screen with previous text fields still filled out and a red mark for the ones that need to change
             //Call to RegisterViewModel to attempt user registration
             ButtonComponent(value = stringResource(id = R.string.register), canRegister, onButtonClicked = {
                 viewModel.registerUser(firstName, lastName, email, username, password)

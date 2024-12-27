@@ -7,6 +7,7 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material.Scaffold
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -21,7 +22,8 @@ import com.ryanmhub.fitnessapp.android_client.common.nav.Screen.DashboardView.ro
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scaffoldState = rememberScaffoldState()
+    //val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -33,11 +35,12 @@ fun MainScreen() {
     val bottomBarHeight by animateDpAsState(targetValue = if (bottomBarVisible) 56.dp else 0.dp, label = "")
 
     Scaffold(
+        scaffoldState = scaffoldState,
         drawerContent = {
-            NavigationDrawerContent(navController, drawerState, scope)
+            NavigationDrawerContent(navController, scaffoldState, scope)
         },
         topBar = {
-            TopAppBarWithHamburger(drawerState, scope)
+            TopAppBarWithHamburger(scaffoldState, scope)
         },
         bottomBar = {
             AnimatedVisibility(
