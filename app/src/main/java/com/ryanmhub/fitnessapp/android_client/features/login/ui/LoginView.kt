@@ -29,13 +29,13 @@ import com.ryanmhub.fitnessapp.android_client.features.login.di.LoginViewModelFa
 
 
 @Composable
-fun LoginView( onNavigateToMain: () -> Unit, onNavigateToRegister: () -> Unit) {
+fun LoginView( onNavigateToMain: () -> Unit, onNavigateToRegister: () -> Unit, preUsername: String) {
     val viewModel : LoginViewModel = viewModel(factory = LoginViewModelFactory(LocalContext.current))
     val loginState by viewModel.loginState
 
     //Todo: remember to remove test values
     //Textfield mutable state
-    val (username, setUsername) = remember { mutableStateOf("rmosk")}
+    val (username, setUsername) = remember { mutableStateOf(preUsername)}
     val (password, setPassword) = remember { mutableStateOf("12345678@A")}
 
     //State Machine Controller
@@ -113,6 +113,7 @@ fun LoginView( onNavigateToMain: () -> Unit, onNavigateToRegister: () -> Unit) {
 fun LoginViewPreview() {
     LoginView(
         { println("Dog")},
-        {println("Register")}
+        {println("Register")},
+        ""
     )
 }

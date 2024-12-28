@@ -22,7 +22,7 @@ import com.ryanmhub.fitnessapp.android_client.features.register.di.RegisterViewM
 
 @OptIn(ExperimentalStdlibApi::class)
 @Composable
-fun RegisterView(viewModel: RegisterViewModel, onNavigateToLogin: () -> Unit){
+fun RegisterView(viewModel: RegisterViewModel, onNavigateToLogin: (String) -> Unit){
     //connect to state machine in viewModel
     val registrationState by viewModel.registrationState
 
@@ -112,10 +112,11 @@ fun RegisterView(viewModel: RegisterViewModel, onNavigateToLogin: () -> Unit){
             Spacer(modifier = Modifier.height(10.dp))
 
             //Todo: Make it so if login fails user goes back to the registration screen with previous text fields still filled out and a red mark for the ones that need to change
+            //Todo: add a Launched Effect attached to a state when the registration is successful to call Login
             //Call to RegisterViewModel to attempt user registration
             ButtonComponent(value = stringResource(id = R.string.register), canRegister, onButtonClicked = {
                 viewModel.registerUser(firstName, lastName, email, username, password)
-                onNavigateToLogin()
+                onNavigateToLogin(username)
             })
 
             Log.d("RegisterView", "Button Clicked")
@@ -128,7 +129,7 @@ fun RegisterView(viewModel: RegisterViewModel, onNavigateToLogin: () -> Unit){
             //Already have an account navigate to LoginView
             ClickableTextComponentEnding(initialText = stringResource(id = R.string.already_registered), ending = stringResource(id = R.string.login), onTextSelected = {
                 //NavRouter.navigateTo(Screen.LoginView)
-                onNavigateToLogin()
+                onNavigateToLogin("")
             })
         }
 

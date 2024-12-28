@@ -8,8 +8,6 @@ import androidx.compose.ui.res.stringResource
 import com.ryanmhub.fitnessapp.android_client.R
 import com.ryanmhub.fitnessapp.android_client.common.data_store.EncryptedDataManager
 import com.ryanmhub.fitnessapp.android_client.common.data_store.authDataStore
-import com.ryanmhub.fitnessapp.android_client.common.nav.NavRouter
-import com.ryanmhub.fitnessapp.android_client.common.nav.Screen
 import com.ryanmhub.fitnessapp.android_client.common.state.BaseAPIState
 import com.ryanmhub.fitnessapp.android_client.features.logout.di.LogoutViewModel
 

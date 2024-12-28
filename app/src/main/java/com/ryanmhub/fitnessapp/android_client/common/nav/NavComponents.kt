@@ -175,13 +175,21 @@ fun PerimeterNavGraph(
         startDestination = Screen.LoginView.route,
         modifier = modifier
     ) {
-        composable(Screen.LoginView.route) {
+        //Moves to Login screen adding the username from registration or empty
+        composable(Screen.LoginView.route + "?username={username}") {
+            backStackEntry -> val username = backStackEntry.arguments?.getString("username") ?: "rmosk"
             LoginView(onNavigateToMain = { navController.navigate("main"){popUpTo("login") {inclusive = true} } },
-                onNavigateToRegister = { navController.navigate("register")})
+                onNavigateToRegister = { navController.navigate("register")},
+                username)
         }
+
+        //Moves to the registration screen, returns the username provided after successful registration
         composable(Screen.RegisterView.route){
-            RegisterView(viewModel = viewModel(), onNavigateToLogin = {navController.navigate("login"){popUpTo("register") {inclusive = true} } })
+            RegisterView(viewModel = viewModel(),
+                onNavigateToLogin = { username -> navController.navigate(Screen.LoginView.route + "?username=$username"){popUpTo("register") {inclusive = true} } })
         }
+
+        //Opens the main application after successful login
         composable(Screen.MainScreen.route) {
             MainScreen(
                 onLogout = {
