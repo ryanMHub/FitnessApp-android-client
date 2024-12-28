@@ -9,6 +9,7 @@ sealed class Screen(val route: String, val icon: androidx.compose.ui.graphics.ve
     object TermsAndConditions : Screen("terms_and_conditions", Icons.Filled.Contacts)
     object LoginView : Screen("login", Icons.Filled.Login)
     object MainScreen : Screen("main", Icons.Filled.Home)
+    object Logout : Screen("logout", Icons.Filled.Logout)
     object DashboardView : Screen("dashboard", Icons.Filled.Dashboard)
     object SettingsView : Screen("settings", Icons.Filled.Settings)
     object HelpView : Screen("help", Icons.Filled.Help)

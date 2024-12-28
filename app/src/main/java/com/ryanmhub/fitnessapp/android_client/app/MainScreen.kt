@@ -20,7 +20,7 @@ import com.ryanmhub.fitnessapp.android_client.common.nav.Screen.DashboardView.ro
 
 //Primary screen which interchanges the desired screen using the navigation of a hamburger button and a bottom bar
 @Composable
-fun MainScreen() {
+fun MainScreen(onLogout: () -> Unit) {
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
     //val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -55,12 +55,13 @@ fun MainScreen() {
             navController = navController,
             modifier = Modifier.padding(innerPadding),
             onSettingsOpen = { bottomBarVisible = false },
-            onHelpOpen = { bottomBarVisible = false }
+            onHelpOpen = { bottomBarVisible = false },
+            onLogout = onLogout
         )
     }
 }
 
-//Todo: Finish implementation
+
 fun shouldShowBottomBar(currentRoute: String?): Boolean {
     return when (route){
         Screen.SettingsView.route -> false

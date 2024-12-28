@@ -28,6 +28,7 @@ import com.ryanmhub.fitnessapp.android_client.app.MainScreen
 import com.ryanmhub.fitnessapp.android_client.features.dashboard.ui.DashboardView
 import com.ryanmhub.fitnessapp.android_client.features.help.ui.HelpView
 import com.ryanmhub.fitnessapp.android_client.features.login.ui.LoginView
+import com.ryanmhub.fitnessapp.android_client.features.logout.ui.LogoutView
 import com.ryanmhub.fitnessapp.android_client.features.register.ui.RegisterView
 import com.ryanmhub.fitnessapp.android_client.features.settings.ui.SettingsView
 import kotlinx.coroutines.launch
@@ -41,7 +42,8 @@ fun NavigationDrawerContent (
 ) {
     val menuItems = listOf(
         Screen.SettingsView to "Settings",
-        Screen.HelpView to "Help"
+        Screen.HelpView to "Help",
+        Screen.Logout to "Logout"
     )
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)){
@@ -139,7 +141,8 @@ fun AppNavGraph(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     onSettingsOpen: () -> Unit,
-    onHelpOpen: () -> Unit
+    onHelpOpen: () -> Unit,
+    onLogout: () -> Unit
 ) {
     NavHost(
         navController = navController,
@@ -154,6 +157,9 @@ fun AppNavGraph(
         composable(Screen.SettingsView.route) {
             onSettingsOpen()
             SettingsView()
+        }
+        composable(Screen.Logout.route) {
+            LogoutView(viewModel = viewModel(), onLogout)
         }
     }
 }
@@ -177,10 +183,16 @@ fun PerimeterNavGraph(
             RegisterView(viewModel = viewModel(), onNavigateToLogin = {navController.navigate("login"){popUpTo("register") {inclusive = true} } })
         }
         composable(Screen.MainScreen.route) {
-            MainScreen()
+            MainScreen(
+                onLogout = {
+                    navController.navigate(Screen.LoginView.route) {
+                        Log.d("PerimeterNavGraph", "Logout Lambda")
+                        popUpTo(navController.graph.id) {inclusive = true}
+                    }
+                })
         }
 
-
+//Todo: does this need to be deleted or resturcture nav system
 //        navigation(startDestination = Screen.LoginView.route, route = "auth"){
 //            composable(Screen.LoginView.route) {
 //                LoginView(onNavigateToMain = { navController.navigate("main") { popUpTo("auth") { inclusive = true}}},

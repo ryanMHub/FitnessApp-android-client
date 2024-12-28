@@ -32,34 +32,8 @@ import com.ryanmhub.fitnessapp.android_client.features.login.ui.LoginView
 
 @Composable
 fun DashboardView(viewModel: DashboardViewModel) {
-
-    //declare data Manager Todo: remove when logout relocation has occured
-    val encryptedDataManager = EncryptedDataManager(LocalContext.current.authDataStore)
-
     var userData by remember { mutableStateOf<UserDTO?>(null) }
-
     val dataState by viewModel.dataState
-
-    //Todo: temporary logout for testing remove when completed
-    val logoutState by viewModel.logoutState
-
-    when(logoutState){
-        is BaseAPIState.Loading -> {
-            CircularProgressIndicator()
-        }
-        is BaseAPIState.Success -> {
-            viewModel.removeTokenDataStore(encryptedDataManager, stringResource(R.string.access_token))
-            viewModel.removeTokenDataStore(encryptedDataManager, stringResource(R.string.refresh_token))
-            NavRouter.navigateTo(Screen.LoginView)
-        }
-        is BaseAPIState.Failed -> {
-            NavRouter.navigateTo(Screen.RegisterView)
-        }
-        is BaseAPIState.Error -> {
-
-        }
-    }
-
 
     //State Machine Controller
     when(dataState){
@@ -91,25 +65,19 @@ fun DashboardView(viewModel: DashboardViewModel) {
                 .padding(30.dp)
         ) {
 
-//            //Todo: temporary display of user data, remove when done with it
-//            //call api to get user data
-//            if(userData==null){
-//                viewModel.getUserData()
-//            } else {
-//                LazyColumn(modifier = Modifier
-//                    .fillMaxSize()
-//                    .padding(16.dp)) {
-//                    items(listOf(userData!!)){ user ->
-//                        UserCard(user)
-//                    }
-//                }
-//            }
-
-            //Todo: remove once global logout created
-            //logout link
-            ClickableTextComponentEnding(initialText = stringResource(id = R.string.logout_message), ending = stringResource(id = R.string.logout), onTextSelected = {
-                viewModel.logout()
-            })
+            //Todo: temporary display of user data, remove when done with it
+            //call api to get user data
+            if(userData==null){
+                viewModel.getUserData()
+            } else {
+                LazyColumn(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)) {
+                    items(listOf(userData!!)){ user ->
+                        UserCard(user)
+                    }
+                }
+            }
         }
     }
 
