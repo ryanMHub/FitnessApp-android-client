@@ -35,27 +35,6 @@ class MainActivity : ComponentActivity() {
             AndroidclientTheme {
                 //MainScreen()
                 PerimeterNavGraph(rememberNavController())
-                // A surface container using the 'background' color from the theme
-//                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-//                    Log.d("MainActivity","Hello World!")
-//
-//                    Crossfade(targetState = NavRouter.currScreen, label = ""){ currScreen ->
-//                        when(currScreen.value) {
-//                            is Screen.RegisterView -> {
-//                                RegisterView(viewModel = viewModel())
-//                            }
-//                            is Screen.TermsAndConditions -> {
-//                                TermsAndConditions()
-//                            }
-//                            is Screen.LoginView -> {
-//                                LoginView()
-//                            }
-//                            is Screen.DashboardView -> {
-//                                DashboardView(viewModel = viewModel())
-//                            }
-//                        }
-//                    }
-//                }
             }
         }
 
